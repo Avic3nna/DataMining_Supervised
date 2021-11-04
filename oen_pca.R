@@ -106,8 +106,8 @@ summary(pc)
 # functions for PCA but own implementation will give a higher grade.
 
 library(stats)
-cols <- 5
-dataset <- matrix(rnorm(cols * 500),ncol= cols)
+cols = 5
+dataset = matrix(rnorm(cols * 500),ncol= cols)
 dataset=cbind(dataset,dataset[,1]*sin(dataset[,1]))
 dataset=cbind(dataset,dataset[,1]*cos(dataset[,1]))
 dataset=cbind(dataset,dataset[,1]*tanh(dataset[,2]))

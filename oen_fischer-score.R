@@ -21,11 +21,19 @@ setwd_current_path()
 
 library(Rdimtools)
 
-#source("./Exercise 1. Distance function/oen_minkowski.R")
 
-load("./3Dgauss.RData")
+load("./2gaussiandata.RData")
 
-x=generated_data
+#x=generated_data
+
+
+
+
+# TO-DO: make a function according to assignment
+
+
+
+
 
 #assumes dataset with labels included
 num_features = dim(x)[2]-1
