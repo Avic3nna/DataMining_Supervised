@@ -30,15 +30,15 @@ pca_self = function(x, variability = 0.95, center_it=TRUE, scale_it = TRUE){
     x <- scale(x, center = center_it, scale = scale_it)
    }
   
-  if(center_it){
-    x_centered = matrix(NA, nrow = dim(x)[1], ncol = dim(x)[2])
-    
-    for(i in seq(along = 1:dim(x)[2])){
-      x_centered[,i] = x[,i] - mean(x[,i])
-      #print(mean(x[,i]))
-    }
-    x = x_centered
-  }
+  # if(center_it){
+  #   x_centered = matrix(NA, nrow = dim(x)[1], ncol = dim(x)[2])
+  #   
+  #   for(i in seq(along = 1:dim(x)[2])){
+  #     x_centered[,i] = x[,i] - mean(x[,i])
+  #     #print(mean(x[,i]))
+  #   }
+  #   x = x_centered
+  # }
   
 
   
@@ -57,7 +57,7 @@ pca_self = function(x, variability = 0.95, center_it=TRUE, scale_it = TRUE){
       break
     }
   }
-
+  print(z)
   rotated_x = x[, 1:z] %*% P$vectors[1:z, 1:z] #eigenvectors, aka rotation
   
   
@@ -92,3 +92,34 @@ pc <- prcomp(x,
              scale. = TRUE)
 
 summary(pc)
+
+
+# If PCA does not work, your features either have non-linear relationships 
+# or no relationships at all.
+
+# Propose a dataset (max dimensionality 10 plus dependent variable) such that the 
+# number of significant 
+# (independent) variables is between 3 and 5 and application of the PCA algorithm 
+# does not lead to reduce 
+# the dimensionality of the dataset. For this exercise the students are allowed to 
+# use standard or third party 
+# functions for PCA but own implementation will give a higher grade.
+
+library(stats)
+cols <- 5
+dataset <- matrix(rnorm(cols * 500),ncol= cols)
+dataset=cbind(dataset,dataset[,1]*sin(dataset[,1]))
+dataset=cbind(dataset,dataset[,1]*cos(dataset[,1]))
+dataset=cbind(dataset,dataset[,1]*tanh(dataset[,2]))
+
+
+
+
+cor_b4 = cor(dataset)
+cor_b4
+
+pca = pca_self(dataset, variability = 1, center_it=TRUE, scale_it = TRUE)
+expl_var = pca$total_variab/sum(pca$total_variab)
+barplot(expl_var, col = 'blue', xlab = 'PC', ylab = 'Variance')
+cor(dataset) #before pca
+cor(dataset %*% pca$rotation) #after pca
