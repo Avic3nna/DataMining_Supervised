@@ -1,3 +1,4 @@
+rm(list=ls())
 set.seed(1337)
 
 packages_used = c("rstudioapi")
@@ -23,6 +24,8 @@ load("./3Dgauss.RData")
 generated_data = as.data.frame(generated_data)
 
 colnames(generated_data) = paste('feature', 1:4)
+
+#split in train and test data
 sample = sample.int(n = nrow(generated_data), size = floor(.9*nrow(generated_data)), replace = F)
 train = generated_data[sample, ]
 test  = generated_data[-sample, ]
@@ -35,4 +38,4 @@ print(dt_bts)
 pred = dt_bts$predict(test[,1:3])
 acc = sum(pred == test[,4])/nrow(test)
 
-#0.9125 acc
+#0.9125 acc with 90/10 train/test
