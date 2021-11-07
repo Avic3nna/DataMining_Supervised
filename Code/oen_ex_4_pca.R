@@ -1,7 +1,8 @@
 rm(list=ls())
 set.seed(1337)
 
-packages_used = c("rstudioapi")
+packages_used = c("rstudioapi",
+                  "stats")
 
 for(package in packages_used){
   if(package %in% rownames(installed.packages()) == FALSE) {
@@ -13,11 +14,11 @@ setwd_current_path = function(){
   library(rstudioapi)
   current_path = getActiveDocumentContext()$path
   setwd(dirname(current_path)) #get this current folder
-  #setwd('..') #go 1 up for scalability
   print(getwd())
 }
 setwd_current_path()
 
+library(stats)
 
 load("./3Dgauss.RData")
 
@@ -72,54 +73,26 @@ pca_self = function(x, variability = 0.95, center_it=TRUE, scale_it = TRUE){
 x= generated_data[, 1:(dim(generated_data)[2] - 1)]
 
 
-data(iris)
-
-x=as.matrix(iris[,1:4])
-
-pca = pca_self(x, variability = 1, center_it=TRUE, scale_it = TRUE)
-
-x11()
-plot(pca$rotated_data[,1], pca$rotated_data[,2], col = iris[,5])
-
-
-
-### 3rd party validation
-
-library(stats)
-
-pc <- prcomp(x,
-             center = TRUE,
-             scale. = TRUE)
-
-summary(pc)
 
 
 # If PCA does not work, your features either have non-linear relationships 
 # or no relationships at all.
 
-# Propose a dataset (max dimensionality 10 plus dependent variable) such that the 
-# number of significant 
-# (independent) variables is between 3 and 5 and application of the PCA algorithm 
-# does not lead to reduce 
-# the dimensionality of the dataset. For this exercise the students are allowed to 
-# use standard or third party 
-# functions for PCA but own implementation will give a higher grade.
 
-library(stats)
 cols = 5
 dataset = matrix(rnorm(cols * 500),ncol= cols)
 dataset=cbind(dataset,dataset[,1]*sin(dataset[,1]))
 dataset=cbind(dataset,dataset[,1]*cos(dataset[,1]))
 dataset=cbind(dataset,dataset[,1]*tanh(dataset[,2]))
 
-
-
-
 cor_b4 = cor(dataset)
 cor_b4
 
 pca = pca_self(dataset, variability = 1, center_it=TRUE, scale_it = TRUE)
 expl_var = pca$total_variab/sum(pca$total_variab)
+
 barplot(expl_var, col = 'blue', xlab = 'PC', ylab = 'Variance')
+title('Variance per Principal Component')
+
 cor(dataset) #before pca
-cor(dataset %*% pca$rotation) #after pca
+cor(pca$rotated_data) #after pca

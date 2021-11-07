@@ -1,6 +1,3 @@
-source('./oen_minkowski.R')
-
-
 knn_omar_train = function(x, num_neigh = 0){
   labels = array(data=NA, dim = nrow(x))
   dist = array(data=NA, dim = nrow(x))

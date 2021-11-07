@@ -13,13 +13,13 @@ setwd_current_path = function(){
   library(rstudioapi)
   current_path = getActiveDocumentContext()$path
   setwd(dirname(current_path)) #get this current folder
-  #setwd('..') #go 1 up for scalability
   print(getwd())
 }
 setwd_current_path()
 
-source('./oen_knn-util.R')
-source('./oen_metrics-util.R')
+source('./Utilities/oen_knn-util.R')
+source('./Utilities/oen_metrics-util.R')
+source('./Utilities/oen_minkowski.R')
 load("./3Dgauss.RData")
 
 x = generated_data
@@ -46,7 +46,8 @@ print(eval)
 #plot misclassification
 misclassif_col = c("indianred1", "seagreen3")[1*(preds == test[,ncol(test)]) +1]
 
-plot(test[,1], test[,2], col = misclassif_col, pch = 20)
+
+plot(test[,1], test[,2], col = misclassif_col, pch = 20, xlab='x', ylab='y')
 title(paste(optim_neighs, '-NN with ', misclassif_list[optim_neighs],
             ' out of ', nrow(test), ' misclassifications', sep=''))
 

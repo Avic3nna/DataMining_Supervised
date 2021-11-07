@@ -13,13 +13,12 @@ setwd_current_path = function(){
   library(rstudioapi)
   current_path = getActiveDocumentContext()$path
   setwd(dirname(current_path)) #get this current folder
-  #setwd('..') #go 1 up for scalability
   print(getwd())
 }
 setwd_current_path()
 
-source('./oen_dt-util.R')
-source('./oen_metrics-util.R')
+source('./Utilities/oen_dt-util.R')
+source('./Utilities/oen_metrics-util.R')
 load("./3Dgauss.RData")
 
 generated_data = as.data.frame(generated_data)
@@ -31,7 +30,7 @@ sample = sample.int(n = nrow(generated_data), size = floor(.9*nrow(generated_dat
 train = generated_data[sample, ]
 test  = generated_data[-sample, ]
 
-dt_bts = OmarDecisionTree(max_depth=20,min_leaf_size=20,min_information_gain=1e-7)
+dt_bts = OmarDecisionTree(max_depth=20,min_leaf_size=5,min_information_gain=1e-5)
 dt_bts$fit(train[,1:(ncol(train)-1)],train[,(ncol(train))])
 
 print(dt_bts)
@@ -45,7 +44,7 @@ print(eval)
 #plot misclassification
 misclassif_col = c("indianred1", "seagreen3")[1*(pred == test[,ncol(test)]) +1]
 
-plot(test[,1], test[,2], col = misclassif_col, pch = 20)
+plot(test[,1], test[,2], col = misclassif_col, pch = 20, xlab='x', ylab='y')
 title(paste('DT with ', nrow(test)-sum(pred == test[,ncol(test)]),
             ' out of ', nrow(test), ' misclassifications', sep=''))
 

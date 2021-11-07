@@ -1,8 +1,7 @@
 rm(list=ls())
 set.seed(1337)
 
-packages_used = c("rstudioapi", 
-                  "Rdimtools")
+packages_used = c("rstudioapi")
 
 for(package in packages_used){
   if(package %in% rownames(installed.packages()) == FALSE) {
@@ -14,25 +13,14 @@ setwd_current_path = function(){
   library(rstudioapi)
   current_path = getActiveDocumentContext()$path
   setwd(dirname(current_path)) #get this current folder
-  #setwd('..') #go 1 up for scalability
   print(getwd())
 }
 setwd_current_path()
 
-library(Rdimtools)
+load("./3Dgauss.RData")
 
 
-load("./2gaussiandata.RData")
-
-#x=generated_data
-
-
-
-
-# TO-DO: make a function according to assignment
-
-
-
+x=generated_data
 
 
 #assumes dataset with labels included
@@ -43,8 +31,6 @@ features = x[,1:num_features]
 labels = x[,num_features+1]
 
 num_classes = length(unique(labels))
-
-# can we use the mean / sd function?
 
 
 #fischer score list
@@ -82,8 +68,10 @@ for(y in seq(along = 1:num_features)){
 }
 print(fischer_score)
 
-# third party implementation for validation
-fscore_thirdparty = do.fscore(features, labels)
-print("Most important features according to 3rd party: ")
-print(fscore_thirdparty$featidx)
-plot(fscore_thirdparty$Y, pch=19, col=factor(labels), main="Fisher Score")
+#library(Rdimtools)
+# # third party implementation for validation
+# fscore_thirdparty = do.fscore(features, labels)
+# print("Most important features according to 3rd party: ")
+# print(fscore_thirdparty$featidx)
+# plot(fscore_thirdparty$Y, pch=19, col=factor(labels), main="Fisher Score")
+
